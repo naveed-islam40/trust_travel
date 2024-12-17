@@ -5,9 +5,9 @@ import messageUtil from "../utilities/message.js";
 
 const isAuthenticated = async (req, res, next) => {
   try {
-    
+
     const token = req.cookies.token
-   
+
     if (!token) {
       return Response.notFound(res, messageUtil.TOKEN_EMPTY);
     }
