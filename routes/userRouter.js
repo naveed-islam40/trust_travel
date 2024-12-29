@@ -4,10 +4,11 @@ import userController from "../controller/userController.js";
 import isAuthenticated from "../middleware/tokenAuth.js";
 
 
-router.post("/signup",  userController.SignUp);
+router.post("/signup", userController.SignUp);
 router.post("/login", userController.Login);
-router.get("/details", isAuthenticated.isAuthenticated , userController.getUserDetails);
-router.post("/forgot/password/email",  userController.ForgotPasswordEmail);
+router.get("/details", isAuthenticated.isAuthenticated, userController.getUserDetails);
+router.put("/update", isAuthenticated.isAuthenticated, userController.UpdateUser);
+router.post("/forgot/password/email", userController.ForgotPasswordEmail);
 router.put("/reset/password/:token", userController.ResetPassword);
 
 //google auth

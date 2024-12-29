@@ -33,7 +33,7 @@ class UserController {
 
   Login = async (req, res) => {
     try {
-      let user = await userService.findByEmail(req.body.email);
+      let user = await UserSchema.findOne({ email: req.body.email });
       if (!user) return Response.notFound(res, messageUtil.NOT_FOUND);
       const isMatch = await comparePassword(req.body.password, user.password);
       if (!isMatch)
@@ -87,7 +87,7 @@ class UserController {
 
                 <p style="font-size: 14px; color: #777; margin-top: 30px;">
                   Thank you,<br>
-                  Your Company Name
+                  Trust Travel
                 </p>
               </div>`,
       };
@@ -162,10 +162,18 @@ class UserController {
   };
 
   UpdateUser = async (req, res) => {
+    const { userId } = req;
+    const { first_name, last_name, email, password } = req.body
     try {
-      let user = await userService.findUser({ _id: req.userId });
+      let user = await userService.findUser(req.userId);
       if (!user) return Response.notFound(res, messageUtil.NOT_FOUND);
-      user = await userService.updateUser(req.query, req.body);
+      const hashPassword = await bcryptHash(password);
+      user = await userService.updateUser(userId, {
+        first_name,
+        last_name,
+        email,
+        password: hashPassword
+      });
       if (!user) return Response.notFound(res, messageUtil.NOT_FOUND);
       return Response.success(res, messageUtil.OK, user);
     } catch (error) {
